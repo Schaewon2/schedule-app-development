@@ -159,3 +159,7 @@
 ```
 
 ---
+
+## ERD
+
+<img width="1052" height="548" alt="Image" src="https://github.com/user-attachments/assets/8b1aeba2-fdb5-4ce4-bd2a-ab6991e8bdcf" />
