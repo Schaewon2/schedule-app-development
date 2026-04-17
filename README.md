@@ -114,7 +114,7 @@
   "title": "스프링 과제 완료",
   "contents": "도전 과제까지 마치기",
   "authorName": "성채원",
-  "password": "qwer1234!!" 
+  "password": "qwer1234!" 
 }
 ```
 
