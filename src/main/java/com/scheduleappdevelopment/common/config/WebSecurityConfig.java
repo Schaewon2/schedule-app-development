@@ -22,7 +22,7 @@ public class WebSecurityConfig {
 
                 // 2. 접근 권한 설정
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/schedules/**").permitAll() // /schedules로 시작하는 주소는 로그인 없이 허용
+                        .requestMatchers("/schedules/**", "/users/**").permitAll() // /schedules로 시작하는 주소는 로그인 없이 허용
                         .anyRequest().authenticated()               // 그 외의 주소는 무조건 로그인(인증) 필요
                 )
 

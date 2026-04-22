@@ -2,6 +2,7 @@ package com.scheduleappdevelopment.schedule.entity;
 
 import com.scheduleappdevelopment.common.entity.BaseEntity;
 import com.scheduleappdevelopment.schedule.dto.ScheduleUpdateRequestDto;
+import com.scheduleappdevelopment.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -23,14 +24,19 @@ public class Schedule extends BaseEntity {
     @Column(nullable = false, columnDefinition = "TEXT") // TEXT 타입으로 설정 (긴 글 저장 가능)
     private String content;
 
+    @ManyToOne(fetch = FetchType.LAZY) // 다대일, 지연 로딩
+    @JoinColumn(name = "user_id", nullable = false) // DB에 user_id 컬럼 생성, NOT NULL 제약조건 설정
+    private User user;
+
     /**
      * 빌더 패턴을 이용한 생성자
      * 생성 시점에 필요한 데이터(title, content)를 명확하게 주입
      */
     @Builder
-    public Schedule(String title, String content) {
+    public Schedule(String title, String content, User user) {
         this.title = title;
         this.content = content;
+        this.user = user;
     }
 
     /**

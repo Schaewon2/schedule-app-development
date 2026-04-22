@@ -1,6 +1,7 @@
 package com.scheduleappdevelopment.schedule.dto;
 
 import com.scheduleappdevelopment.schedule.entity.Schedule;
+import com.scheduleappdevelopment.user.entity.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,20 +12,23 @@ public class ScheduleCreateRequestDto {
 
     private String title;
     private String content;
+    private Long userId;
 
     @Builder // 빌더 패턴 : 객체 생성 시 field 명을 명시하여 가독성을 높인다.
-    public ScheduleCreateRequestDto(String title, String content) {
+    public ScheduleCreateRequestDto(String title, String content, Long userId) {
         this.title = title;
         this.content = content;
+        this.userId = userId;
     }
 
     /**
      * 인스턴스 메서드 : DTO가 가진 데이터를 기반으로 Entity 객체를 생성한다.
      */
-    public Schedule toEntity() {
+    public Schedule toEntity(User user) {
         return Schedule.builder().
                 title(this.title)
                 .content(this.content)
+                .user(user)
                 .build();
     }
 }
