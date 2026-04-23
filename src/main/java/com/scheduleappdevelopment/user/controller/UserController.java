@@ -2,6 +2,8 @@ package com.scheduleappdevelopment.user.controller;
 
 import com.scheduleappdevelopment.user.dto.*;
 import com.scheduleappdevelopment.user.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -78,5 +80,29 @@ public class UserController {
         userService.deleteUser(userId);
         ResponseEntity<Void> response = new ResponseEntity<>(HttpStatus.NO_CONTENT);
         return response;
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<String> login(
+            @Valid @RequestBody LoginRequestDto requestDto,
+            HttpServletRequest request
+    ) {
+        // 1. 로그인 로직 수행
+        Long userId = userService.login(requestDto);
+
+        // 2. 세션 생성 및 정보 저장
+        HttpSession session = request.getSession(); // 세션이 있으면 반환, 없으면 새로 생성
+        session.setAttribute("LOGIN_USER_ID", userId); // 세션에 유저 ID 저장
+
+        return ResponseEntity.ok("로그인 성공! 유저 ID: " + userId);
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate(); // 세션 무효화
+        }
+        return ResponseEntity.ok("로그아웃 성공");
     }
 }

@@ -99,4 +99,18 @@ public class UserService {
         // 3. Repository를 통해 해당 ID를 가진 데이터를 DB에서 삭제하기
         userRepository.deleteById(userId);
     }
+
+    public Long login(LoginRequestDto dto) {
+        // 1. 이메일로 유저 찾기
+        User user = userRepository.findByEmail(dto.getEmail())
+                .orElseThrow(() -> new IllegalArgumentException("해당 이메일을 가진 유저가 없습니다."));
+
+        // 2. 비밀번호 일치 확인
+        if (!user.getPassword().equals(dto.getPassword())) {
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+        }
+
+        // 3. 성공 시 유저 ID 반환
+        return user.getId();
+    }
 }
