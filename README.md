@@ -1,165 +1,191 @@
-## 일정 CRUD API 명세서
+# 👤 유저(User) API 명세서
 
-### 1. 일정 생성 (Create)
-새로운 일정을 등록합니다.
+### 1. 유저 생성 (Create)
 
-| 항목 | 내용 |
-| :--- | :--- |
-| **기능** | 일정 작성 |
+새로운 유저를 등록합니다. (회원가입)
+
+| **항목** | **내용** |
+| --- | --- |
+| **기능** | 회원가입 |
 | **Method** | `POST` |
-| **URL** | `/api/schedules` |
-| **Request Header**| `Content-Type: application/json` |
+| **URL** | `/users` |
 
 **Request Body**
+
 ```json
 {
-  "title": "정보처리기사 공부",
-  "contents": "2023~2025 기출 n회독하기",
-  "authorName": "성채원",
-  "password": "qwer1234!"
+  "userName": "채원",
+  "email": "chaewon@naver.com",
+  "password": "password123!"
 }
 ```
 
 **Response Body (201 Created)**
+
 ```json
 {
   "id": 1,
-  "title": "정보처리기사 공부",
-  "contents": "2023~2025 기출 n회독하기",
-  "authorName": "성채원",
-  "createdAt": "2026-04-16T12:00:00",
-  "updatedAt": "2026-04-16T12:00:00"
+  "userName": "채원",
+  "email": "chaewon@naver.com",
+  "createdAt": "2026-04-23T13:00:00",
+  "modifiedAt": "2026-04-23T13:00:00"
 }
 ```
 
 ---
 
-### 2. 전체 일정 목록 조회 (Read)
-등록된 모든 일정을 조회합니다. (비밀번호는 응답에서 제외)
+### 2. 유저 로그인 (Login)
 
-| 항목 | 내용 |
-| :--- | :--- |
-| **기능** | 전체 일정 조회 |
-| **Method** | `GET` |
-| **URL** | `/api/schedules` |
+이메일과 비밀번호를 검증하여 세션을 생성합니다.
 
-**Request**
-* 파라미터 없음 (필요시 `?updatedAt=YYYY-MM-DD&managerName=홍길동` 등 필터링 조건 추가 가능)
+| **항목** | **내용** |
+| --- | --- |
+| **기능** | 로그인 및 세션 발급 |
+| **Method** | `POST` |
+| **URL** | `/users/login` |
+
+**Request Body**
+
+```json
+{
+  "email": "chaewon@naver.com",
+  "password": "password123!"
+}
+```
 
 **Response Body (200 OK)**
+
+```
+"로그인 성공! 유저 ID: 1"`
+```
+---
+
+### 3. 유저 로그아웃 (Logout)
+
+생성된 세션을 파기합니다.
+
+| **항목** | **내용** |
+| --- | --- |
+| **기능** | 로그아웃 처리 |
+| **Method** | `POST` |
+| **URL** | `/users/logout` |
+
+**Response Body (200 OK)**
+
+```
+"로그아웃 성공"`
+```
+
+---
+
+### 4. 전체 유저 목록 조회 (Read)
+
+시스템에 등록된 모든 유저를 조회합니다.
+
+| **항목** | **내용** |
+| --- | --- |
+| **기능** | 유저 전체 조회 |
+| **Method** | `GET` |
+| **URL** | `/users` |
+
+**Response Body (200 OK)**
+
 ```json
 [
   {
     "id": 1,
-    "title": "정보처리기사 공부",
-    "contents": "2023~2025 기출 n회독하기",
-    "authorName": "성채원",
-    "createdAt": "2026-04-16T12:00:00",
-    "updatedAt": "2026-04-16T12:00:00"
-  },
-  {
-    "id": 2,
-    "title": "스프링 필수과제",
-    "contents": "API 명세서 만들고, ERD 생성하기",
-    "authorName": "스파르타",
-    "createdAt": "2026-04-17T12:00:00",
-    "updatedAt": "2026-04-17T12:00:00"
+    "userName": "채원",
+    "email": "chaewon@naver.com",
+    "createdAt": "2026-04-23T13:00:00"
   }
 ]
 ```
 
 ---
 
-### 3. 선택 일정 단건 조회 (Read)
-특정 ID의 일정을 조회합니다. (비밀번호는 응답에서 제외)
+## 📅 일정(Schedule) API 명세서
 
-| 항목 | 내용 |
-| :--- | :--- |
-| **기능** | 선택 일정 단건 조회 |
-| **Method** | `GET` |
-| **URL** | `/api/schedules/{id}` |
+### 1. 일정 생성 (Create)
 
-**Request**
-* **Path Variable**: `id` (Long, 조회할 일정의 고유 식별자)
+새로운 일정을 등록합니다. (**로그인 세션 필수**)
 
-**Response Body (200 OK)**
-```json
-{
-  "id": 2,
-  "title": "스프링 필수과제",
-  "contents": "API 명세서 만들고, ERD 생성하기",
-  "authorName": "스파르타",
-  "createdAt": "2026-04-17T12:00:00",
-  "updatedAt": "2026-04-17T12:00:00"
-}
-```
+| **항목** | **내용** |
+| --- | --- |
+| **기능** | 일정 작성 |
+| **Method** | `POST` |
+| **URL** | `/schedules` |
 
----
+**Request Header**
 
-### 4. 선택 일정 수정 (Update)
-특정 ID의 일정을 수정합니다. (비밀번호가 일치해야 수정 가능)
-
-| 항목 | 내용 |
-| :--- | :--- |
-| **기능** | 선택 일정 수정 |
-| **Method** | `PUT` |
-| **URL** | `/api/schedules/{id}` |
-
-**Request**
-* **Path Variable**: `id` (Long, 수정할 일정 ID)
+- `Cookie: JSESSIONID=...`
 
 **Request Body**
+
 ```json
 {
-  "title": "집 대청소하기",
-  "contents": "청소기, 설거지, 빨래",
-  "authorName": "CHAE",
-  "password": "qwer1234!" 
+  "title": "API 명세서 작성",
+  "content": "양식에 맞춰서 상세히 작성하기"
 }
 ```
 
-**Response Body (200 OK)**
+**Response Body (201 Created)**
+
 ```json
 {
   "id": 1,
-  "title": "집 대청소하기",
-  "contents": "청소기, 설거지, 빨래",
-  "authorName": "CHAE",
-  "createdAt": "2026-04-16T12:00:00",
-  "updatedAt": "2026-04-17T13:15:00"
+  "title": "API 명세서 작성",
+  "content": "양식에 맞춰서 상세히 작성하기",
+  "userName": "채원",
+  "createdAt": "2026-04-23T13:50:00"
 }
 ```
 
 ---
 
-### 5. 선택 일정 삭제 (Delete)
-특정 ID의 일정을 삭제합니다. (비밀번호가 일치해야 삭제 가능)
+### 2. 선택 일정 수정 (Update)
 
-| 항목 | 내용 |
-| :--- | :--- |
-| **기능** | 선택 일정 삭제 |
-| **Method** | `DELETE` |
-| **URL** | `/api/schedules/{id}` |
+특정 일정을 수정합니다. (**작성자 본인 세션 필수**)
 
-**Request**
-* **Path Variable**: `id` (Long, 삭제할 일정 ID)
+| **항목** | **내용** |
+| --- | --- |
+| **기능** | 일정 내용 수정 |
+| **Method** | `PATCH` |
+| **URL** | `/schedules/{id}` |
 
 **Request Body**
+
 ```json
 {
-  "password": "qwer1234!"
+  "title": "수정된 일정 제목",
+  "content": "수정된 내용입니다."
 }
 ```
 
-**Response Body (200 OK 혹은 204 No Content)**
+**Response Body (200 OK)**
+
 ```json
 {
-  "message": "일정이 성공적으로 삭제되었습니다."
+  "id": 1,
+  "title": "수정된 일정 제목",
+  "content": "수정된 내용입니다.",
+  "modifiedAt": "2026-04-23T13:55:00"
 }
 ```
 
 ---
 
-## ERD
+### 3. 선택 일정 삭제 (Delete)
 
-<img width="1052" height="548" alt="Image" src="https://github.com/user-attachments/assets/8b1aeba2-fdb5-4ce4-bd2a-ab6991e8bdcf" />
+특정 일정을 삭제합니다. (**작성자 본인 세션 필수**)
+
+| **항목** | **내용** |
+| --- | --- |
+| **기능** | 일정 삭제 |
+| **Method** | `DELETE` |
+| **URL** | `/schedules/{id}` |
+
+**Response Body (200 OK)**
+
+```
+"삭제가 완료되었습니다."`
+```
