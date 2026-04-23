@@ -12,14 +12,18 @@ public class ScheduleCreateResponseDto {
     private final Long id;
     private final String title;
     private final String content;
+    private final Long userId;
+    private final String userName;
     private final LocalDateTime createdAt;
     private final LocalDateTime modifiedAt;
 
     @Builder // 빌더 패턴 : 객체 생성 시 field 명을 명시하여 가독성을 높인다.
-    public ScheduleCreateResponseDto(Long id, String title, String content, LocalDateTime createdAt, LocalDateTime modifiedAt) {
+    public ScheduleCreateResponseDto(Long id, String title, String content, Long userId, String userName, LocalDateTime createdAt, LocalDateTime modifiedAt) {
         this.id = id;
         this.title = title;
         this.content = content;
+        this.userId = userId;
+        this.userName = userName;
         this.createdAt = createdAt;
         this.modifiedAt = modifiedAt;
     }
@@ -34,6 +38,8 @@ public class ScheduleCreateResponseDto {
                 .id(schedule.getId())
                 .title(schedule.getTitle())
                 .content(schedule.getContent())
+                .userId(schedule.getUser().getId())    // 유저 고유 식별자(PK)
+                .userName(schedule.getUser().getName()) // 유저 이름
                 .createdAt(schedule.getCreatedAt())
                 .modifiedAt(schedule.getModifiedAt())
                 .build();

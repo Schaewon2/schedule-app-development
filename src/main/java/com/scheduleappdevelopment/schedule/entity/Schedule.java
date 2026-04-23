@@ -30,7 +30,7 @@ public class Schedule extends BaseEntity {
 
     /**
      * 빌더 패턴을 이용한 생성자
-     * 생성 시점에 필요한 데이터(title, content)를 명확하게 주입
+     * 생성 시점에 필요한 데이터(title, content, user)를 명확하게 주입
      */
     @Builder
     public Schedule(String title, String content, User user) {
