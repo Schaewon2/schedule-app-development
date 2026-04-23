@@ -149,7 +149,7 @@
 | **항목** | **내용** |
 | --- | --- |
 | **기능** | 일정 내용 수정 |
-| **Method** | `PATCH` |
+| **Method** | `PUT` |
 | **URL** | `/schedules/{id}` |
 
 **Request Body**
