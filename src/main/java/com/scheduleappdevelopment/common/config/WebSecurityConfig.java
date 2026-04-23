@@ -17,18 +17,10 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                // 1. CSRF 보안 기능 비활성화: 테스트 단계(Postman)에서 요청을 편하게 보내기 위함
-                .csrf(AbstractHttpConfigurer::disable)
-
-                // 2. 접근 권한 설정
+                .csrf(AbstractHttpConfigurer::disable) // CSRF 보안 비활성화 (테스트 시 필수)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/schedules/**", "/users/**").permitAll() // /schedules로 시작하는 주소는 로그인 없이 허용
-                        .anyRequest().authenticated()               // 그 외의 주소는 무조건 로그인(인증) 필요
-                )
-
-                // 3. 기본 로그인 폼 및 HTTP 기본 인증 비활성화: 우리가 만든 API만 쓸 것이므로 불필요한 기능 제거
-                .formLogin(AbstractHttpConfigurer::disable)
-                .httpBasic(AbstractHttpConfigurer::disable);
+                        .anyRequest().permitAll() // 모든 요청 인증 없이 허용
+                );
 
         return http.build();
     }

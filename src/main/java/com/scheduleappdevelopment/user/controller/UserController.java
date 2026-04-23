@@ -2,6 +2,7 @@ package com.scheduleappdevelopment.user.controller;
 
 import com.scheduleappdevelopment.user.dto.*;
 import com.scheduleappdevelopment.user.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,7 @@ public class UserController {
      * @return 생성된 유저 데이터, 201 Created
      */
     @PostMapping
-    public ResponseEntity<UserCreateResponseDto> createUserAPI(@RequestBody UserCreateRequestDto requestDto){
+    public ResponseEntity<UserCreateResponseDto> createUserAPI(@Valid @RequestBody UserCreateRequestDto requestDto){
         UserCreateResponseDto responseDto = userService.createUser(requestDto);
         ResponseEntity<UserCreateResponseDto> response = new ResponseEntity<>(responseDto, HttpStatus.CREATED);
         return response;
